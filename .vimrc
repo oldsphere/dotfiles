@@ -29,6 +29,8 @@ Plugin 'plasticboy/vim-markdown'
 Plugin 'powerline/powerline'
 Plugin 'tpope/vim-surround'
 
+source ~/.vim/plugin/TODO.vim
+
 
 """""""""""""""""""""""""""""""""""""
 "            SHORT-CUTS             "
@@ -55,8 +57,8 @@ map <leader>h "zyiw:exe "h ".@z.""<CR>
 nnoremap <leader>r :so $MYVIMRC<CR>:echo ".vimrc reloaded!"<CR>
 
 " Activate higlight
-"let g:hlstate=0
-"noremap <leader>h :if (hlstate == 0) \| set hlsearch \| else \| nohlsearch \| endif \| let hlstate=1-hlstate<CR><CR>
+"let g:hlstate=1
+"noremap <leader>h :if (hlstate == 1) \| set hlsearch \| else \| nohlsearch \| endif \| let hlstate=1-hlstate<CR><CR>
 
 "Insert date
 "nnoremap <leader>. :pu!=strftime('%a %d/%m/%Y  %H:%M:%S')<CR> "LEGACY
@@ -77,7 +79,7 @@ map <leader>t :NERDTreeToggle <CR>
 nnoremap <leader>w :w<CR>
 
 " Select all
-map <C-a> ggVG
+"map <C-a> ggVG
 
 " quick escpae
 nnoremap <leader>q :q<CR>
@@ -85,8 +87,8 @@ nnoremap <leader>q :q<CR>
 " Move lines up and down
 nnoremap <C-Down> ddp
 nnoremap <C-Up> ddkP
-nnoremap <Left> <Nop>
-nnoremap <Right> <Nop>
+"nnoremap <Left> <Nop>
+"nnoremap <Right> <Nop>
 
 " Control to switch between windows
 nnoremap <C-J> <C-W><C-J>
@@ -104,7 +106,7 @@ nnoremap N Nzz
 map <leader>c :tabnew <CR>:edit ~/.vimrc<CR>
 
 " Edit system/TODO
-map <leader>s :vsplit ~/system/TODO<CR>
+map <silent> <leader>s :call TODO_Open()<CR>
 
 """"""""""""""""""""""""""""""""""""""""""
 "            GENERAL CONFIGUATION  		 "
@@ -183,6 +185,8 @@ set fo+=t
 " link mapping
 map <leader>u :call HandleURL()<CR><CR>
 noremap <leader>o :call HandlePDF()<CR><CR>
+"noremap <leader>o :call HandleTXT()<CR><CR>
+
 "
 "Remove the timeout between commands
 set notimeout nottimeout
@@ -222,19 +226,10 @@ au BufNewFile,BufRead *.py
     \ nnoremap <F5> :!clear;python3 %<CR>|
     \ nnoremap <leader><F5> :!clear;python3 -i %<CR>
 
-augroup helpfiles
-  au!
-  au BufRead,BufEnter */doc/* wincmd L
-augroup END
-
-"augroup markdown " {{{2
-"    au!
-"    au BufEnter * let &complete=".,w,b,u,t,i"
-"    au BufNewFile,BufRead   *.txt,*.md,*.mkd,*.markdown,*.mdwn setl ft=pandoc ts=3 sw=3
-"    au BufNewFile,BufRead   *.txt,*.md,*.mkd,*.markdown,*.mdwn let &complete="k".expand("%:p:h")."/*.md"
-"    " au BufRead,BufWrite,InsertChange *.txt,*.md,*.mkd,*.markdown,*.mdwn syn match ErrorMsg '\%>77v.\+'
-"    au BufNewFile,BufRead */_posts/*.markdown setl completefunc=TagComplete | cd $BLOG
-"augroup end
+"augroup helpfiles
+"  au!
+"  au BufRead,BufEnter */doc/* wincmd L
+"augroup END
 
 """""""""""""""""""""""""""""""""""""""""""""""""
 "               Functions                       "
@@ -265,6 +260,16 @@ function! HandleURL()
   endif
 endfunction
 
+function! HandleTXT()
+  let s:uri = matchstr(getline("."), '.\+\.[tT][xX][Tt]')
+  echo s:uri
+  if s:uri != ""
+      exec "vsplit ".s:uri
+  else
+     echo "No URI found in line."
+  endif
+endfunction
+
 function! HandlePDF()
   let s:uri = matchstr(getline("."), '.\+\.[pP][dD][fF]')
   echo s:uri
@@ -274,3 +279,21 @@ function! HandlePDF()
      echo "No URI found in line."
   endif
 endfunction
+
+function! s:ExecuteInShell(command)
+  let command = join(map(split(a:command), 'expand(v:val)'))
+  "let winnr = bufwinnr('^' . command . '$')
+  "silent! execute  winnr < 0 ? 'botright new ' . fnameescape(command) : winnr . 'wincmd w'
+  let winnr = bufwinnr('^output_command$')
+  silent! execute  winnr < 0 ? 'botright new ' . fnameescape('output_command') : winnr . 'wincmd w'
+  setlocal buftype=nowrite bufhidden=wipe nobuflisted noswapfile nowrap 
+  echo 'Execute ' . command . '...'
+  silent! execute 'silent %!'. command
+  "silent! execute 'resize ' . line('$')
+  silent! redraw
+  silent! execute 'au BufUnload <buffer> execute bufwinnr(' . bufnr('#') . ') . ''wincmd w'''
+  silent! execute 'nnoremap <silent> <buffer> <LocalLeader>r :call <SID>ExecuteInShell(''' . command . ''')<CR>'
+  echo 'Shell command ' . command . ' executed.'
+endfunction
+command! -complete=shellcmd -nargs=+ Shell call s:ExecuteInShell(<q-args>)
+

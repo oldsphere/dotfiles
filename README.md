@@ -38,3 +38,15 @@ cd fonts
 
 Seen how to install at https://thecustomizewindows.com/2018/01/install-powerline-fonts-symbols-bash-windows-10/
 
+## Installing ZSH and Oh-My-zsh
+* First install `zsh`
+
+`sudo apt-get install zsh`
+
+* check that the proper version is installed. `zsh --version` should be higher
+  than 5.1.1
+
+* Install Oh-my-zsh using git.
+`sh -c "$(curl -fsSL
+https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"`
+

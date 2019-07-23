@@ -7,7 +7,7 @@ Notes on WSL
 
 * For vim just add `set belloff=all` in `.vimrc`  
 * for zsh add `unsetopt BEEP` on `.zshrc`
-  Seen on https://blog.vghaisas.com/zsh-beep-sound/
+  (seen at https://blog.vghaisas.com/zsh-beep-sound/)
 
 
 ## Adding fonts for powershell
@@ -36,5 +36,5 @@ cd fonts
 
 * Select `DejaVu Sans Mono for Powershell` font on the shell terminal.
 
-Seen how to install in https://thecustomizewindows.com/2018/01/install-powerline-fonts-symbols-bash-windows-10/
+Seen how to install at https://thecustomizewindows.com/2018/01/install-powerline-fonts-symbols-bash-windows-10/
 

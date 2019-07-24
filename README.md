@@ -6,6 +6,9 @@ Notes on WSL
   "beep" sound.
 
 * For vim just add `set belloff=all` in `.vimrc`  
+* for bash edit `/etc/inputrc` and uncomment the `set bell-style none` line-
+    - You need to have sudo permission to edit this file.
+    - An alternative is to have a `.inputrc` on the home folder
 * for zsh add `unsetopt BEEP` on `.zshrc`
   (seen at https://blog.vghaisas.com/zsh-beep-sound/)
 
@@ -50,3 +53,6 @@ Seen how to install at https://thecustomizewindows.com/2018/01/install-powerline
 `sh -c "$(curl -fsSL
 https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"`
 
+* Seems that `git` autocomplete prompt have problems with WSL. The iteraction
+  is sooo slow, so it is convenient to modify the theme to remove this
+  prompt_info.

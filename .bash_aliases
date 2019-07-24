@@ -8,7 +8,7 @@ alias tt='tree -L 2'
 # Aliases for quick moving
 alias qadd='ln -s `pwd` $HOME/quick'
 qcd() {
-    cd "$(readpath $1)"
+    cd "$(realpath $1)"
 }
 
 # Bindings

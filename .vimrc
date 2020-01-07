@@ -1,299 +1,202 @@
+" -------------------- USABILITY CONFIGURATION --------------------
 
-"""""""""""""""""""""""""""""""""""""
-"		VUNDLE SETTINGS             "
-"""""""""""""""""""""""""""""""""""""
+" don't make vim copatible with vi
+set nocompatible
 
-set nocompatible              " required
-filetype off                  " required
-
-" set the runtime path to include Vundle and initialize
-set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#begin()
-
-" let Vundle manage Vundle, required
-Plugin 'VundleVim/Vundle.vim'
-
-
-" All of your Plugins must be added before the following line
-call vundle#end()            " required
-filetype plugin indent on    " required
+"turn on syntax highlight
 syntax on
+" show lines
+set number
 
-" Add all your plugins here 
-"Plugin 'Valloric/YouCompleteMe'
-Plugin 'scrooloose/nerdtree'
-Plugin 'jistr/vim-nerdtree-tabs'
-Plugin 'godlygeek/tabular'
-Plugin 'vim-scripts/FuzzyFinder'
-Plugin 'plasticboy/vim-markdown'
-Plugin 'powerline/powerline'
-Plugin 'tpope/vim-surround'
+" make vim try to detect file types and load plugins for them
+filetype on
+filetype plugin on
+filetype indent on
 
-source ~/.vim/plugin/TODO.vim
+" reload files changed outside vim
+set autoread
+
+" Indent fold method
+set foldmethod=indent 
+set foldlevel=5
+
+"encoding is utf 8
+set encoding=utf-8
+set fileencoding=utf-8
+
+" by default, in insert mode backspace won't delete over line breaks, or 
+" automatically-inserted indentation, let's change that
+set backspace=indent,eol,start
+
+" Disable errorbell
+set noerrorbells
+set vb t_vb=
+
+" dont't unload buffers when they are abandoned, instead stay in the
+" background
+set hidden
+
+" set unix line endings
+set fileformat=unix
+" when reading files try unix line endings then dos, also use unix for new
+" buffers
+set fileformats=unix,dos
+
+" save up to 100 marks, enable capital marks
+set viminfo='100,f1
+
+" screen will not be redrawn while running macros, registers or other
+" non-typed comments
+set lazyredraw
+
+" set color scheme
+if $COLORTERM == 'gnome-terminal'
+	set t_Co=256
+endif
+
+try
+	colorscheme mydesert
+catch
+endtry
+"
+"Set split order
+set splitright
+
+" ---------------------- CUSTOMIZATION ----------------------
+"  The following are some extra mappings/configs to enhance my personal
+"  VIM experience
+
+" set , as mapleader
+let mapleader = ","
+let maplocalleader = "º"
+
+" map numeric pad up/down to prev/next buffer
+nnoremap 8 :bp<CR>
+nnoremap 2 :bn<CR>
+
+" suggestion for normal mode commands
+set wildmode=list:longest
+
+" remove the .ext~ files, but not the swapfiles
+set nobackup
+set writebackup
+set noswapfile
+
+" search settings
+set incsearch        " find the next match as we type the search
+set hlsearch         " hilight searches by default
+" use ESC to remove search higlight
+nnoremap <silent><expr> <leader>h (&hls && v:hlsearch ? ':nohls' : ':set hls')."\n"
+
+" keep the cursor visible within 3 lines when scrolling
+set scrolloff=3
 
 
-"""""""""""""""""""""""""""""""""""""
-"            SHORT-CUTS             "
-"""""""""""""""""""""""""""""""""""""
-let g:NERDTreeChDirMode=2
-let g:fuf_keyOpen='<Tab>'
-let mapleader=","
+" indentation
+set expandtab       " use spaces instead of tabs
+set autoindent      " autoindent based on line above, works most of the time
+set smartindent     " smarter indent for C-like languages
+set shiftwidth=4    " when reading, tabs are 4 spaces
+set softtabstop=4   " in insert mode, tabs are 4 spaces
 
-" Remap o/O for adding new lines
-"nnoremap <C-o> o<esc><esc>
-"nnoremap <C-O> O<esc><esc>
+" no lines longer than 80 cols
+set textwidth=80
+
+"select all mapping
+noremap <leader>a ggVG
+
+" make a mark for column 80
+""set colorcolumn=80
+" and set the mark color to DarkSlateGray
+""highlight ColorColumn ctermbg=lightgray guibg=lightgray
 
 " Folding with spacebar
 nnoremap <space> za
 
-" Open search map
-map <leader>f :FufFileWithFullCwd <CR>
-map <leader>F :FufDirWithFullCwd <CR>
-
-" Search the cursor selected workd on help
-map <leader>h "zyiw:exe "h ".@z.""<CR> 
-
-" reload .vimrc
-nnoremap <leader>r :so $MYVIMRC<CR>:echo ".vimrc reloaded!"<CR>
-
-" Activate higlight
-"let g:hlstate=1
-"noremap <leader>h :if (hlstate == 1) \| set hlsearch \| else \| nohlsearch \| endif \| let hlstate=1-hlstate<CR><CR>
-
 "Insert date
-"nnoremap <leader>. :pu!=strftime('%a %d/%m/%Y  %H:%M:%S')<CR> "LEGACY
-nnoremap <leader>. "=strftime("%a %d/%m/%Y %H:%M:%S ")<C-M>p
-nnoremap <leader>: "=strftime("%d/%m/%Y %H:%M:%S ")<C-M>pi 
-
-" Very magic search
-nnoremap / /\v
-nnoremap ? ?\v
-
-" Quick replace
-nnoremap <S-R> :%s/
+nnoremap <leader>. "=strftime("%a %d/%m/%Y %H:%M:%S ")<C-M>p<Esc>
+nnoremap <leader>: "=strftime("%d/%m/%Y %H:%M:%S ")<C-M>pi<Esc>
 
 " Open NERDTree
-map <leader>t :NERDTreeToggle <CR>
-
-" Quick save 
-nnoremap <leader>w :w<CR>
-
-" Select all
-"map <C-a> ggVG
+nnoremap <leader>t :NERDTreeToggle <CR>
 
 " quick escpae
+nnoremap <leader>Q :q!<CR>
 nnoremap <leader>q :q<CR>
 
 " Move lines up and down
-nnoremap <C-Down> ddp
 nnoremap <C-Up> ddkP
-"nnoremap <Left> <Nop>
-"nnoremap <Right> <Nop>
+nnoremap <C-Down> ddp
 
 " Control to switch between windows
 nnoremap <C-J> <C-W><C-J>
 nnoremap <C-K> <C-W><C-K>
 nnoremap <C-L> <C-W><C-L>
 nnoremap <C-H> <C-W><C-H>
-    
+
 " Easy tab
 vnoremap > >gv
 vnoremap < <gv
 
+" Centered search
 nnoremap n nzz
 nnoremap N Nzz
-" Edit .vimrc
-map <leader>c :tabnew <CR>:edit ~/.vimrc<CR>
-
-" Edit system/TODO
-map <silent> <leader>s :call TODO_Open()<CR>
-
-""""""""""""""""""""""""""""""""""""""""""
-"            GENERAL CONFIGUATION  		 "
-""""""""""""""""""""""""""""""""""""""""""
-
-"Set split order
-set splitright
-" Indent fold method
-set foldmethod=indent 
-set foldlevel=99
-set lazyredraw
-set ttyfast
+" Remap VIM 0 to first non-blank character
+nnoremap 0 ^
 
 " Clipboard
-set clipboard=unnamedplus
+set clipboard=unnamed
+nmap <localleader>d "+d
+nmap <localleader>D "+D
+nmap <localleader>y "+y
+nmap <localleader>Y "+Y
+nmap <localleader>yy "+yy
+vmap <localleader>y "+y
+vmap <localleader>Y "+Y
+nmap <localleader>p "+p
+nmap <localleader>P "+P
 
-" Always show current position
-set ruler
+" -------------------- PLUGIN CONFIGURATION --------------------
+"  initiate Vundle
+let &runtimepath.=',$HOME/.vim/bundle/Vundle.vim'
+call vundle#begin()
 
-" Configure backspace so it acts as it should act
-set backspace=eol,start,indent
-set whichwrap=<,>,h,l
+Plugin 'gmarik/Vundle.vim'
 
-" Turn backup off
-set nobackup
-set nowb
-set noswapfile
+" start plugin definition
+"Plugin 'Valloric/YouCompleteMe'
+Plugin 'scrooloose/nerdtree'
+Plugin 'jistr/vim-nerdtree-tabs'
+Plugin 'godlygeek/tabular'
+Plugin 'vim-scripts/L9'
+Plugin 'vim-scripts/FuzzyFinder'
+"Plugin 'tpope/vim-fugitive'
+Plugin 'Lokaltog/powerline', {'rtp': 'powerline/bindings/vim/'}
+Plugin 'tpope/vim-surround'
+Plugin 'jiangmiao/auto-pairs'
+Plugin 'kana/vim-fakeclip'
+Plugin 'plasticboy/vim-markdown'
+" end plugin definition
 
-" Use spaces instead of tabs
-set expandtab
+call vundle#end()            " required for vundle
 
-" Smart tabs activated
-set smarttab
+" -------------------- SYNTAX  --------------------
+augroup filetype_markdown
+    autocmd!
+    autocmd BufNewFile,BufRead *.md
+        \ nnoremap <buffer> <localleader>e :call MarkdownMarkErrorLine()<CR>|
+        \ vnoremap <buffer> <localleader>e :call MarkdownMarkErrorLine()<CR>|
+        \ nnoremap <buffer> <localleader>w :call MarkdownMarkWarningLine()<CR>|
+        \ vnoremap <buffer> <localleader>w :call MarkdownMarkWarningLine()<CR>|
+        \ nnoremap <buffer> <localleader>b :call MarkdownMarkCheckBox()<CR>|
+        \ vnoremap <buffer> <localleader>b :'<,'>call MarkdownMarkCheckBox()<CR>|
+        \ nnoremap <buffer> <CR> :call MarkdownToggleCheckBox()<CR>|
+        \ vnoremap <buffer> <CR> :'<,'>call MarkdownToggleCheckBox()<CR> |
+        \ nnoremap <buffer> <localleader>s $o<esc>80i=<esc>o
+augroup END
 
-" 1 tab== 4 spaces
-set shiftwidth=4
-set tabstop=4
-
-" Linebreak on 500 chracters
-set lbr
-set tm=99
-
-set ai  "Auto indent"
-set si "Smart indent"
-set wrap "Wrap lines"
-
-" Setup Satus line
-set laststatus=2
-set magic
-"set statusline=\ %{HasPaste()}%F%m%r%h\ %w\ \ CWD: %r%{getcwd()}%h\ \ \ Line:\ %l\ \ Columns:\ %c
-set statusline=\ %F%m%r\ \ \ \ \ Line:\ %l\ \ Columns:\ %c
-
-" Remap VIM 0 to first non-blank character
-map 0 ^
-
-""""""""""""""""""""""""""""""""""
-"		     SYNTAX	          	 "
-""""""""""""""""""""""""""""""""""
-
-syntax enable
-
-if $COLORTERM == 'gnome-terminal'
-	set t_Co=256
-endif
-
-try
-	colorscheme desert
-catch
-endtry
-highlight Search guibg=blue guifg='NONE'
-
-" Break the lines to fix the text width
-set textwidth=79
-set fo+=t
-
-" link mapping
-map <leader>u :call HandleURL()<CR><CR>
-noremap <leader>o :call HandlePDF()<CR><CR>
-"noremap <leader>o :call HandleTXT()<CR><CR>
-
-"
-"Remove the timeout between commands
-set notimeout nottimeout
-
-
-""""""""""""""""""""""""""""""""""""""""
-"           FILE SPECIFIC              "
-""""""""""""""""""""""""""""""""""""""""
-
-augroup nonvim " {{{2
-    au!
-    au BufRead *.png,*.jpg,*.gif,*.xls*,*.scpt sil exe "!xviewer " . shellescape(expand("%:p")) | bd | let &ft=&ft | redraw!
-    au BufRead *.pdf sil exe "!okular """ . shellescape(expand("%:p")) . """ &>/dev/null &" | bd | let &ft=&ft | redraw!
-augroup end
-
-" Note file configuration
-au BufNewFile,BufRead *.note 
-    \ set tabstop=4 |
-    \ set textwidth=79 |
-    \ set fo+=t |
-    \ let g:ycm_auto_trigger=0
-
-au BufNewFile,BufRead *.tex noremap <F5> :!clear;latex2pdf %:p<CR>
-
-" Python file configuration
-au BufNewFile,BufRead *.py 
-	\ set tabstop=4 |
-	\ set softtabstop=4  |
-	\ set shiftwidth=4  |
-	\ set textwidth=79 |
-	\ set expandtab |
-	\ set autoindent | 
-	\ set fileformat=unix |
-	\ set number |	
-	\ set foldmethod=indent |
-	\ set foldlevel=99 |
-    \ nnoremap <F5> :!clear;python3 %<CR>|
-    \ nnoremap <leader><F5> :!clear;python3 -i %<CR>
-
-"augroup helpfiles
-"  au!
-"  au BufRead,BufEnter */doc/* wincmd L
-"augroup END
-
-"""""""""""""""""""""""""""""""""""""""""""""""""
-"               Functions                       "
-"""""""""""""""""""""""""""""""""""""""""""""""""
-
-function! HasPaste()
-    if &paste
-        return 'PASTE MODE  '
-    endif
-    return ''
-endfunction
-
-
-function! CmdLine(str)
-    exe "menu Foo.Bar" . a:str
-    emenu Foo.Bar
-    umenu Foo
-endfunction
-
-
-function! HandleURL()
-  let s:uri = matchstr(getline("."), '[a-z]*:\/\/[^ >,;]*')
-  echo s:uri
-  if s:uri != ""
-    exec "!firefox '".s:uri."'&"
-  else
-    echo "No URI found in line."
-  endif
-endfunction
-
-function! HandleTXT()
-  let s:uri = matchstr(getline("."), '.\+\.[tT][xX][Tt]')
-  echo s:uri
-  if s:uri != ""
-      exec "vsplit ".s:uri
-  else
-     echo "No URI found in line."
-  endif
-endfunction
-
-function! HandlePDF()
-  let s:uri = matchstr(getline("."), '.\+\.[pP][dD][fF]')
-  echo s:uri
-  if s:uri != ""
-    exec "!okular '".s:uri."' &>/dev/null &"
-  else
-     echo "No URI found in line."
-  endif
-endfunction
-
-function! s:ExecuteInShell(command)
-  let command = join(map(split(a:command), 'expand(v:val)'))
-  "let winnr = bufwinnr('^' . command . '$')
-  "silent! execute  winnr < 0 ? 'botright new ' . fnameescape(command) : winnr . 'wincmd w'
-  let winnr = bufwinnr('^output_command$')
-  silent! execute  winnr < 0 ? 'botright new ' . fnameescape('output_command') : winnr . 'wincmd w'
-  setlocal buftype=nowrite bufhidden=wipe nobuflisted noswapfile nowrap 
-  echo 'Execute ' . command . '...'
-  silent! execute 'silent %!'. command
-  "silent! execute 'resize ' . line('$')
-  silent! redraw
-  silent! execute 'au BufUnload <buffer> execute bufwinnr(' . bufnr('#') . ') . ''wincmd w'''
-  silent! execute 'nnoremap <silent> <buffer> <LocalLeader>r :call <SID>ExecuteInShell(''' . command . ''')<CR>'
-  echo 'Shell command ' . command . ' executed.'
-endfunction
-command! -complete=shellcmd -nargs=+ Shell call s:ExecuteInShell(<q-args>)
-
+augroup web_dev
+    autocmd!
+    autocmd BufNewFile,BufRead *.html
+        \ inoremap <buffer> <F8> </<C-X><C-O><Esc>bhhi
+augroup END

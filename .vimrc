@@ -1,202 +1,181 @@
-" -------------------- USABILITY CONFIGURATION --------------------
+" -------- USABILITY CONFIGURATION -------- "
 
-" don't make vim copatible with vi
+" Don't make vim compatible with vi
 set nocompatible
 
-"turn on syntax highlight
 syntax on
-" show lines
 set number
+set relativenumber
 
-" make vim try to detect file types and load plugins for them
+" Make Vim detect file types and load specific plugins
+set autoread
 filetype on
-filetype plugin on
+filetype plugin on 
 filetype indent on
 
-" reload files changed outside vim
-set autoread
-
-" Indent fold method
-set foldmethod=indent 
+" Default fold method
+set foldmethod=indent
 set foldlevel=5
 
-"encoding is utf 8
+" Remap scape in insert mode
+inoremap jk <ESC>
+
+" Remap symbols for american keyboard [TEMPORA]
+inoremap º <
+inoremap ª >
+
+" Block Selection
+nnoremap <A-Q> <C-V>
+
+" Default encoding is UTF-8
 set encoding=utf-8
 set fileencoding=utf-8
 
-" by default, in insert mode backspace won't delete over line breaks, or 
-" automatically-inserted indentation, let's change that
+" Make backspace fucntion as expected
 set backspace=indent,eol,start
 
 " Disable errorbell
 set noerrorbells
 set vb t_vb=
 
-" dont't unload buffers when they are abandoned, instead stay in the
-" background
+" Don't unload buffers when abandoned
 set hidden
 
-" set unix line endings
+" Set UNIX line endings
 set fileformat=unix
-" when reading files try unix line endings then dos, also use unix for new
-" buffers
 set fileformats=unix,dos
 
-" save up to 100 marks, enable capital marks
-set viminfo='100,f1
+" Optimize screen refresh
+"set lazyredraw
 
-" screen will not be redrawn while running macros, registers or other
-" non-typed comments
-set lazyredraw
-
-" set color scheme
-if $COLORTERM == 'gnome-terminal'
-	set t_Co=256
-endif
-
+" Set colorscheme
 try
-	colorscheme mydesert
+    colorscheme mydesert
 catch
 endtry
-"
-"Set split order
+
+" Set split order
 set splitright
 
-" ---------------------- CUSTOMIZATION ----------------------
-"  The following are some extra mappings/configs to enhance my personal
-"  VIM experience
+" Navigating tags
+nnoremap <C-g> <C-]>
 
-" set , as mapleader
-let mapleader = ","
-let maplocalleader = "º"
+" Block selection
+nnoremap Q <C-v>
 
-" map numeric pad up/down to prev/next buffer
-nnoremap 8 :bp<CR>
-nnoremap 2 :bn<CR>
+" -------- CUSTOMIZATION -------- "
+let mapleader=','
+let maplocalleader='º'
 
-" suggestion for normal mode commands
-set wildmode=list:longest
+set wildmode=list:full
 
-" remove the .ext~ files, but not the swapfiles
+" Remove the .ext~ files
 set nobackup
 set writebackup
 set noswapfile
 
-" search settings
-set incsearch        " find the next match as we type the search
-set hlsearch         " hilight searches by default
-" use ESC to remove search higlight
-nnoremap <silent><expr> <leader>h (&hls && v:hlsearch ? ':nohls' : ':set hls')."\n"
+" Search settings
+set incsearch
+set hlsearch
+nnoremap <silent><expr> <leader>h (&hls && v:hlsearch ? ':nohls' : 'set hls')."\n"
+nnoremap n nzz
+nnoremap N Nzz
 
-" keep the cursor visible within 3 lines when scrolling
-set scrolloff=3
+" Indentation settings
+set expandtab			" Use spaces instead of tabs
+set autoindent			" Autoindent based on line above
+set smartindent
+set shiftwidth=4
+set softtabstop=4
 
-
-" indentation
-set expandtab       " use spaces instead of tabs
-set autoindent      " autoindent based on line above, works most of the time
-set smartindent     " smarter indent for C-like languages
-set shiftwidth=4    " when reading, tabs are 4 spaces
-set softtabstop=4   " in insert mode, tabs are 4 spaces
-
-" no lines longer than 80 cols
+" Set max line width
 set textwidth=80
 
-"select all mapping
-noremap <leader>a ggVG
-
-" make a mark for column 80
-""set colorcolumn=80
-" and set the mark color to DarkSlateGray
-""highlight ColorColumn ctermbg=lightgray guibg=lightgray
-
-" Folding with spacebar
+" Folding settings
 nnoremap <space> za
 
-"Insert date
+" Insert date
 nnoremap <leader>. "=strftime("%a %d/%m/%Y %H:%M:%S ")<C-M>p<Esc>
 nnoremap <leader>: "=strftime("%d/%m/%Y %H:%M:%S ")<C-M>pi<Esc>
 
-" Open NERDTree
-nnoremap <leader>t :NERDTreeToggle <CR>
+" Quick Scape
+nnoremap <leader>Q :qa!<cr>
+nnoremap <leader>q :q<cr>
+nnoremap <leader>w :w<cr>
 
-" quick escpae
-nnoremap <leader>Q :q!<CR>
-nnoremap <leader>q :q<CR>
-
-" Move lines up and down
-nnoremap <C-Up> ddkP
-nnoremap <C-Down> ddp
-
-" Control to switch between windows
-nnoremap <C-J> <C-W><C-J>
-nnoremap <C-K> <C-W><C-K>
-nnoremap <C-L> <C-W><C-L>
-nnoremap <C-H> <C-W><C-H>
+" Control switch between windows
+nnoremap <silent> <C-J> <C-W><C-J>
+nnoremap <silent> <C-H> <C-W><C-H>
+nnoremap <silent> <C-L> <C-W><C-L>
+nnoremap <silent> <C-K> <C-W><C-K>
 
 " Easy tab
 vnoremap > >gv
 vnoremap < <gv
 
-" Centered search
-nnoremap n nzz
-nnoremap N Nzz
-" Remap VIM 0 to first non-blank character
+" Quick visual block
+nnoremap <C-q> <C-v>"
+
+" Quick access to settings
+nnoremap <leader>c :tabnew ~/.vimrc<cr>
+
+" Remap vim 0 to first non-black character
 nnoremap 0 ^
 
 " Clipboard
-set clipboard=unnamed
-nmap <localleader>d "+d
-nmap <localleader>D "+D
-nmap <localleader>y "+y
-nmap <localleader>Y "+Y
-nmap <localleader>yy "+yy
-vmap <localleader>y "+y
-vmap <localleader>Y "+Y
-nmap <localleader>p "+p
-nmap <localleader>P "+P
+set clipboard=unnamedplus
 
-" -------------------- PLUGIN CONFIGURATION --------------------
-"  initiate Vundle
-let &runtimepath.=',$HOME/.vim/bundle/Vundle.vim'
+" tab maps
+nnoremap g1 1gt
+nnoremap g2 2gt
+nnoremap g3 3gt
+nnoremap g4 4gt
+
+" Open terminal
+nnoremap tt :vertical terminal<cr>
+
+" Quick running in other pane (tmux)
+nnoremap <F6> :nnoremap \<F5\> :!tmux send-keys -t "1:1.1" 'clean' Enter './%' \<cr\> 
+
+" ------- PLUGIN CONFIGURATION -------- "
+let &runtimepath.=",$HOME/.vim/bundle/Vundle.vim"
 call vundle#begin()
+    Plugin 'gmarik/Vundle.vim'
+    Plugin 'vim-script/L9'
+    Plugin 'plasticboy/vim-markdown'
+    Plugin 'vim-script/FuzzyFinder'
+        " Mappings
+        nnoremap <silent> <leader>ff :FufCoverageFile<CR>
+        nnoremap <silent> <leader>fb :FufBuffer<CR>
+        nnoremap <silent> <leader>fh : FufHelp<CR>
+    Plugin 'scrooloose/nerdtree'
+        " Options
+        let NERDTreeChDirMode=2
+        " Mappings
+        nnoremap <leader>t :NERDTreeToggle<CR>
+        nnoremap gff :NERDTreeFind<cr>
+    Plugin 'neocline/coc.nvim', {'branch' : 'relese'}
+        " Options
+        " Mappings
+        nnoremap gd <Plug>(coc-definition)
+        nnoremap gr <Plug>(coc-references)
+    Plugin 'kana/vim-fakeclip'
+        " Mapping
+        nmap <leader>d "+d
+        nmap <leader>D "+D
+        nmap <leader>y "+y
+        nmap <leader>Y "+Y
+        nmap <leader>yy "+yy
+        vmap <leader>y "+y
+        vmap <leader>Y "+Y
+        nmap <leader>p "+p
+        nmap <leader>P "+P
+call vundle#end()
 
-Plugin 'gmarik/Vundle.vim'
-
-" start plugin definition
-"Plugin 'Valloric/YouCompleteMe'
-Plugin 'scrooloose/nerdtree'
-Plugin 'jistr/vim-nerdtree-tabs'
-Plugin 'godlygeek/tabular'
-Plugin 'vim-scripts/L9'
-Plugin 'vim-scripts/FuzzyFinder'
-"Plugin 'tpope/vim-fugitive'
-Plugin 'Lokaltog/powerline', {'rtp': 'powerline/bindings/vim/'}
-Plugin 'tpope/vim-surround'
-Plugin 'jiangmiao/auto-pairs'
-Plugin 'kana/vim-fakeclip'
-Plugin 'plasticboy/vim-markdown'
-" end plugin definition
-
-call vundle#end()            " required for vundle
-
-" -------------------- SYNTAX  --------------------
-augroup filetype_markdown
+" -------- SYNTAX -------- "
+augroup python
     autocmd!
-    autocmd BufNewFile,BufRead *.md
-        \ nnoremap <buffer> <localleader>e :call MarkdownMarkErrorLine()<CR>|
-        \ vnoremap <buffer> <localleader>e :call MarkdownMarkErrorLine()<CR>|
-        \ nnoremap <buffer> <localleader>w :call MarkdownMarkWarningLine()<CR>|
-        \ vnoremap <buffer> <localleader>w :call MarkdownMarkWarningLine()<CR>|
-        \ nnoremap <buffer> <localleader>b :call MarkdownMarkCheckBox()<CR>|
-        \ vnoremap <buffer> <localleader>b :'<,'>call MarkdownMarkCheckBox()<CR>|
-        \ nnoremap <buffer> <CR> :call MarkdownToggleCheckBox()<CR>|
-        \ vnoremap <buffer> <CR> :'<,'>call MarkdownToggleCheckBox()<CR> |
-        \ nnoremap <buffer> <localleader>s $o<esc>80i=<esc>o
-augroup END
-
-augroup web_dev
-    autocmd!
-    autocmd BufNewFile,BufRead *.html
-        \ inoremap <buffer> <F8> </<C-X><C-O><Esc>bhhi
+    autocmd BufNewFile,BufRead *.py
+        \ noremap <F5> :!clear && python3 %<cr>|
+        \ noremap <leader><F5> :!ipython3 -i % <cr>
 augroup END

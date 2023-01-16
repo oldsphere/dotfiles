@@ -130,6 +130,3 @@ shopt -u progcomp
 
 # Disable Bell
 set bell-style none
-
-export HTTP_PROXY=http://10.8.0.1:3128
-export HTTPS_PROXY=https://10.8.0.1:3128
